@@ -1,5 +1,9 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavBarProps {
   planCount?: number;
@@ -7,11 +11,13 @@ interface NavBarProps {
 }
 
 const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
+  const pathname = usePathname();
+
   return (
     <header className="w-full bg-[#0a0c10] border-b border-zinc-800/80 py-4">
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
-        
-        <div className="flex items-center gap-2 font-bold text-xl text-white whitespace-nowrap">
+  
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white whitespace-nowrap">
           <Image 
             src="/logo.png" 
             alt="Logo" 
@@ -20,14 +26,28 @@ const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
             className="w-8 h-8 object-contain shrink-0"
           />
           <span>FITLOG</span>
-        </div>
+        </Link>
         <div className="flex items-center gap-2">
-          <button className="btn btn-sm rounded-full bg-[#1d2600] text-[#ccff00] border-none px-5">
+          <Link
+            href="/"
+            className={`btn btn-sm rounded-full px-5 flex items-center justify-center ${
+              pathname === '/'
+                ? 'bg-[#1d2600] text-[#ccff00] border-none'
+                : 'btn-ghost text-zinc-400 hover:text-white'
+            }`}
+          >
             Workouts
-          </button>
-          <button className="btn btn-sm btn-ghost rounded-full text-zinc-400 hover:text-white px-5">
+          </Link>
+          <Link
+            href="/my-plan"
+            className={`btn btn-sm rounded-full px-5 flex items-center justify-center ${
+              pathname === '/my-plan'
+                ? 'bg-[#1d2600] text-[#ccff00] border-none'
+                : 'btn-ghost text-zinc-400 hover:text-white'
+            }`}
+          >
             My Plan
-          </button>
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm">

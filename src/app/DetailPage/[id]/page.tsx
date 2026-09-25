@@ -23,7 +23,7 @@ const DetailPage = async ({ params }: DetailPageProps) => {
 
         <div className="w-full h-[450px] md:h-[550px] relative rounded-3xl overflow-hidden bg-zinc-900 border border-zinc-800">
           <Image
-            src={workout.image || '/banner.png'}
+            src={workout.image}
             alt={workout.name}
             fill
             className="object-cover object-center"
