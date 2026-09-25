@@ -1,5 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from 'next/image'
+import bannerimg from '../../public/banner.png';
 
 const Banner = () => {
     return (
@@ -31,8 +32,8 @@ const Banner = () => {
                     </div>
                     <div className="flex-1 flex justify-center md:justify-end w-full max-w-md">
                         <div className="relative w-full h-[300px] md:h-[380px]">
-                            <Image
-                                src="/banner.png"
+                            <Image 
+                                src={bannerimg}
                                 alt="Gym"
                                 fill
                                 className="object-contain"
