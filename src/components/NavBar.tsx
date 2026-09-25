@@ -9,10 +9,8 @@ interface NavBarProps {
 const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
   return (
     <header className="w-full bg-[#0a0c10] border-b border-zinc-800/80 py-4">
-      {/* Max-width with side-padding for clean spacing */}
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
         
-        {/* Left Side: Logo */}
         <div className="flex items-center gap-2 font-bold text-xl text-white whitespace-nowrap">
           <Image 
             src="/logo.png" 
@@ -23,8 +21,6 @@ const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
           />
           <span>FITLOG</span>
         </div>
-
-        {/* Middle Side: Links */}
         <div className="flex items-center gap-2">
           <button className="btn btn-sm rounded-full bg-[#1d2600] text-[#ccff00] border-none px-5">
             Workouts
@@ -33,8 +29,6 @@ const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
             My Plan
           </button>
         </div>
-
-        {/* Right Side: Badges */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm">
             <span className="text-zinc-300 font-medium text-xs">Plan</span>
