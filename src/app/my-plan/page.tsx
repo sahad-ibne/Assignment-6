@@ -87,21 +87,19 @@ export default function MyPlanPage() {
           <div className="flex bg-[#13151b] p-1 rounded-xl border border-zinc-800">
             <button
               onClick={() => setActiveTab('today')}
-              className={`px-5 py-2 text-xs font-bold rounded-lg transition-all ${
-                activeTab === 'today'
+              className={`px-5 py-2 text-xs font-bold rounded-lg transition-all ${activeTab === 'today'
                   ? 'bg-zinc-800 text-white'
                   : 'text-zinc-400 hover:text-white'
-              }`}
+                }`}
             >
               Today's Plan ({todayPlan.length})
             </button>
             <button
               onClick={() => setActiveTab('saved')}
-              className={`px-5 py-2 text-xs font-bold rounded-lg transition-all ${
-                activeTab === 'saved'
+              className={`px-5 py-2 text-xs font-bold rounded-lg transition-all ${activeTab === 'saved'
                   ? 'bg-zinc-800 text-white'
                   : 'text-zinc-400 hover:text-white'
-              }`}
+                }`}
             >
               Saved ({savedPlan.length})
             </button>
@@ -171,7 +169,9 @@ export default function MyPlanPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+
+
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full border-t border-zinc-800/60 pt-3 md:border-t-0 md:pt-0 md:w-auto">
                     <div className="flex items-center gap-4 text-zinc-400 text-xs">
                       <span className="flex items-center gap-1">
                         <FaRegClock /> {displayDuration} min
@@ -186,10 +186,10 @@ export default function MyPlanPage() {
                       )}
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
                       <Link
                         href={`/DetailPage/${item.id}`}
-                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-lg"
+                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-lg flex-1 sm:flex-none text-center"
                       >
                         View Details
                       </Link>
@@ -197,7 +197,7 @@ export default function MyPlanPage() {
                       {activeTab === 'today' && (
                         <button
                           onClick={() => handleRemove(item.id)}
-                          className="flex items-center gap-1 text-xs bg-[#ccff00] text-black font-bold px-3 py-2 rounded-lg hover:bg-[#bce600]"
+                          className="flex items-center justify-center gap-1 text-xs bg-[#ccff00] text-black font-bold px-3 py-2 rounded-lg hover:bg-[#bce600] flex-1 sm:flex-none"
                         >
                           <FaCheck className="text-[10px]" /> Mark as Done
                         </button>
@@ -205,12 +205,13 @@ export default function MyPlanPage() {
 
                       <button
                         onClick={() => handleRemove(item.id)}
-                        className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
+                        className="p-2 text-zinc-400 hover:text-red-500 transition-colors shrink-0"
                       >
                         <FaTimes />
                       </button>
                     </div>
                   </div>
+
                 </div>
               );
             })}
