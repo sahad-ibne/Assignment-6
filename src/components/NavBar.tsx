@@ -1,22 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { PlanContext } from '@/context/PlanContext';
 
-interface NavBarProps {
-  planCount?: number;
-  savedCount?: number;
-}
-
-const NavBar = ({ planCount = 0, savedCount = 0 }: NavBarProps) => {
+const NavBar = () => {
   const pathname = usePathname();
+  const context = useContext(PlanContext);
+
+  const planCount = context?.todayPlan.length;
+  const savedCount = context?.savedPlan.length;
 
   return (
     <header className="w-full bg-[#0a0c10] border-b border-zinc-800/80 py-4">
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
-  
+        
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white whitespace-nowrap">
           <Image 
             src="/logo.png" 

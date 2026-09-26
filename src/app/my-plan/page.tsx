@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { PlanContext } from '@/context/PlanContext';
 import { FaRegClock, FaFire, FaRegStar, FaCheck, FaTimes } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function MyPlanPage() {
   const [activeTab, setActiveTab] = useState<'today' | 'saved'>('today');
@@ -18,19 +19,20 @@ export default function MyPlanPage() {
 
   const totalExercises = currentList.length;
   const totalMinutes = currentList.reduce(
-    (acc, item) => acc + (Number(item.duration)),
+    (acc, item) => acc + Number(item.duration || 0),
     0
   );
   const totalCalories = currentList.reduce(
-    (acc, item) => acc + (Number(item.caloriesBurned ?? item.calories) || 0),
+    (acc, item) => acc + Number(item.caloriesBurned ?? item.calories ?? 0),
     0
   );
-
-  const handleRemove = (id:number) => {
+  const handleRemove = (id: number) => {
     if (activeTab === 'today') {
       removeFromTodayPlan(id);
+      toast.success("Removed from today's plan");
     } else {
       removeFromSavedPlan(id);
+      toast.success("Removed from saved");
     }
   };
 
@@ -85,7 +87,7 @@ export default function MyPlanPage() {
         </div>
         {currentList.length === 0 ? (
           <div className="border border-dashed border-zinc-800/80 rounded-3xl p-16 text-center space-y-4 my-8">
-            <h3 className="text-xl md:text-2xl font-black ">
+            <h3 className="text-xl md:text-2xl font-black">
               NOTHING HERE YET
             </h3>
             <p className="text-zinc-400 text-xs max-w-sm mx-auto">
@@ -147,7 +149,7 @@ export default function MyPlanPage() {
                     <div className="flex items-center gap-2">
                       <Link
                         href={`/DetailPage/${item.id}`}
-                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-lg "
+                        className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-lg"
                       >
                         View Details
                       </Link>
