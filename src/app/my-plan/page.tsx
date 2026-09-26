@@ -4,11 +4,13 @@ import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PlanContext } from '@/context/PlanContext';
-import { FaRegClock, FaFire, FaRegStar, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaRegClock, FaFire, FaRegStar, FaCheck, FaTimes, FaChevronDown } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 export default function MyPlanPage() {
   const [activeTab, setActiveTab] = useState<'today' | 'saved'>('today');
+  const [sortBy, setSortBy] = useState<'duration' | 'calories' | 'rating'>('duration');
+
   const context = useContext(PlanContext);
 
   if (!context) return null;
@@ -17,15 +19,35 @@ export default function MyPlanPage() {
 
   const currentList = activeTab === 'today' ? todayPlan : savedPlan;
 
+  const sortedList = [...currentList].sort((a: any, b: any) => {
+    if (sortBy === 'duration') {
+      const durA = Number(a.duration || a.time || 0);
+      const durB = Number(b.duration || b.time || 0);
+      return durB - durA;
+    }
+    if (sortBy === 'calories') {
+      const calA = Number(a.caloriesBurned ?? a.calories ?? a.kcal ?? 0);
+      const calB = Number(b.caloriesBurned ?? b.calories ?? b.kcal ?? 0);
+      return calB - calA;
+    }
+    if (sortBy === 'rating') {
+      const rateA = Number(a.rating || a.rate || 0);
+      const rateB = Number(b.rating || b.rate || 0);
+      return rateB - rateA;
+    }
+    return 0;
+  });
+
   const totalExercises = currentList.length;
   const totalMinutes = currentList.reduce(
-    (acc, item) => acc + Number(item.duration || 0),
+    (acc: number, item: any) => acc + Number(item.duration || item.time || 0),
     0
   );
   const totalCalories = currentList.reduce(
-    (acc, item) => acc + Number(item.caloriesBurned ?? item.calories ?? 0),
+    (acc: number, item: any) => acc + Number(item.caloriesBurned ?? item.calories ?? item.kcal ?? 0),
     0
   );
+
   const handleRemove = (id: number) => {
     if (activeTab === 'today') {
       removeFromTodayPlan(id);
@@ -61,7 +83,7 @@ export default function MyPlanPage() {
             <h2 className="text-3xl font-black text-white mt-1">{totalCalories}</h2>
           </div>
         </div>
-        <div className="flex border-b border-zinc-800 pb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
           <div className="flex bg-[#13151b] p-1 rounded-xl border border-zinc-800">
             <button
               onClick={() => setActiveTab('today')}
@@ -84,8 +106,24 @@ export default function MyPlanPage() {
               Saved ({savedPlan.length})
             </button>
           </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-zinc-400">Sort By</span>
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'duration' | 'calories' | 'rating')}
+                className="appearance-none bg-[#13151b] border border-zinc-700/80 text-white text-xs font-semibold py-2 pl-4 pr-9 rounded-xl focus:outline-none focus:border-[#ccff00] cursor-pointer"
+              >
+                <option value="duration">Duration</option>
+                <option value="calories">Calories</option>
+                <option value="rating">Rating</option>
+              </select>
+              <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 text-[10px] pointer-events-none" />
+            </div>
+          </div>
         </div>
-        {currentList.length === 0 ? (
+        {sortedList.length === 0 ? (
           <div className="border border-dashed border-zinc-800/80 rounded-3xl p-16 text-center space-y-4 my-8">
             <h3 className="text-xl md:text-2xl font-black">
               NOTHING HERE YET
@@ -104,10 +142,12 @@ export default function MyPlanPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {currentList.map((item) => {
-              const displayName = item.name || 'Exercise';
-              const displayCategory = item.equipment || 'Exercise';
-              const displayCalories = item.caloriesBurned ?? item.calories ?? 0;
+            {sortedList.map((item: any) => {
+              const displayName = item.name || item.title || 'Exercise';
+              const displayCategory = item.equipment || item.category || 'Exercise';
+              const displayDuration = item.duration || item.time || 0;
+              const displayCalories = item.caloriesBurned ?? item.calories ?? item.kcal ?? 0;
+              const displayRating = item.rating || item.rate || 0;
 
               return (
                 <div
@@ -117,7 +157,7 @@ export default function MyPlanPage() {
                   <div className="flex items-center gap-4 w-full md:w-auto">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-zinc-900 shrink-0">
                       <Image
-                        src={item.image}
+                        src={item.image || '/placeholder.png'}
                         alt={displayName}
                         fill
                         className="object-cover"
@@ -134,14 +174,14 @@ export default function MyPlanPage() {
                   <div className="flex flex-wrap items-center gap-6 w-full md:w-auto justify-between md:justify-end">
                     <div className="flex items-center gap-4 text-zinc-400 text-xs">
                       <span className="flex items-center gap-1">
-                        <FaRegClock /> {item.duration} min
+                        <FaRegClock /> {displayDuration} min
                       </span>
                       <span className="flex items-center gap-1">
                         <FaFire /> {displayCalories} kcal
                       </span>
-                      {item.rating && (
+                      {displayRating > 0 && (
                         <span className="flex items-center gap-1">
-                          <FaRegStar /> {item.rating}
+                          <FaRegStar /> {displayRating}
                         </span>
                       )}
                     </div>
