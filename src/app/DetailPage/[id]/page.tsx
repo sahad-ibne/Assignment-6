@@ -88,9 +88,7 @@ const DetailPage = async ({ params }: DetailPageProps) => {
             </div>
           </div>
           <WorkoutActions workout={workout} />
-
         </div>
-
       </div>
     </main>
   );
